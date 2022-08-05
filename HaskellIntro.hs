@@ -15,22 +15,42 @@ isThisWorking = "Yes"
 --
 
 lastDigit :: Integer -> Integer
-lastDigit = error "lastDigit not yet defined"
+lastDigit n = n `mod` 10
 
 dropLastDigit :: Integer -> Integer
-dropLastDigit = error "dropLastDigit not yet defined"
+dropLastDigit n = (n - lastDigit n) `div` 10
 
 toDigits :: Integer -> [Integer]
-toDigits = error "toDigits not yet defined"
+toDigits n
+    | n <= 0 = []
+    | otherwise = toDigits (dropLastDigit n) ++ [lastDigit n]
 
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther = error "doubleEveryOther not yet defined"
+doubleEveryOther x = reverseList (doubleEveryOtherHelper x)
+
+doubleEveryOtherHelper :: [Integer] -> [Integer]
+doubleEveryOtherHelper [] = []
+doubleEveryOtherHelper (x:xs)
+    | odd (length xs) = doubleEveryOtherHelper xs ++ [x * 2]
+    | otherwise = doubleEveryOtherHelper xs ++ [x]
+
+reverseList :: [Integer] -> [Integer]
+reverseList [] = []
+reverseList (x:xs) = reverseList xs ++ [x]
 
 sumDigits :: [Integer] -> Integer
-sumDigits = error "sumDigits not yet defined"
+sumDigits [] = 0
+sumDigits (x:xs) = sumDigits xs + digitAdder x
+
+digitAdder :: Integer -> Integer
+digitAdder n
+    | n < 10 = n
+    | otherwise = digitAdder (dropLastDigit n) + lastDigit n
 
 validate :: Integer -> Bool
-validate = error "validate not yet defined"
+validate n
+    | lastDigit (sumDigits (doubleEveryOther (toDigits n))) == 0 = True
+    | otherwise = False
 
 --
 -- Problem 2
