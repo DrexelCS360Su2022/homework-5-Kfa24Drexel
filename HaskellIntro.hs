@@ -3,6 +3,7 @@
 module HaskellIntro where
 
 import Set
+import GHC.Num (integerToInt)
 
 -- Load this file into GHCi (say, with `ghci HaskellIntro.hs`) and type
 -- `isThisWorking` at the prompt. GHCi will tell you whether it's working!
@@ -56,20 +57,37 @@ validate n
 -- Problem 2
 --
 
+simple :: a -> a
+simple x = x
+
 pow :: (a -> a) -> Int -> a -> a
-pow = error "pow not yet defined"
+pow f n
+    | n < 1 = simple
+    | n == 1 = f
+    | otherwise = f.pow f (n - 1)
 
 g :: Integer -> Integer
-g = error "g not yet defined"
+g 0 = 0
+g n = n - pow g 2 (n-1)
 
 h :: Integer -> Integer
-h = error "h not yet defined"
+h 0 = 0
+h n = n - pow h 3 (n-1)
 
-d :: Int -> Integer -> Integer
-d = error "d not yet defined"
+d :: Integer -> Integer -> Integer
+d i 0 = 0
+d 2 n = g n
+d 3 n = h n
+d i n = 0
+
+
+
 
 --
 -- Problem 3
 --
 
-powerSet = error "powerSet not yet defined"
+powerSet :: Ord a => Set a -> Set (Set a)
+powerSet xs
+    | isEmpty xs = singleton xs
+    | otherwise = singleton xs
